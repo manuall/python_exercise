@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio-documentation -->
+<html lang="en" data-content_root="./"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PyAudio Documentation — PyAudio 0.2.14 documentation</title>
+    <link rel="stylesheet" type="text/css" href="./PyAudio Documentation — PyAudio 0.2.14 documentation_files/pygments.css">
+    <link rel="stylesheet" type="text/css" href="./PyAudio Documentation — PyAudio 0.2.14 documentation_files/nature.css">
+    <script src="./PyAudio Documentation — PyAudio 0.2.14 documentation_files/documentation_options.js.download"></script>
+    <script src="./PyAudio Documentation — PyAudio 0.2.14 documentation_files/doctools.js.download"></script>
+    <script src="./PyAudio Documentation — PyAudio 0.2.14 documentation_files/sphinx_highlight.js.download"></script>
+    <link rel="index" title="Index" href="https://people.csail.mit.edu/hubert/pyaudio/docs/genindex.html">
+    <link rel="search" title="Search" href="https://people.csail.mit.edu/hubert/pyaudio/docs/search.html"> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="https://people.csail.mit.edu/hubert/pyaudio/docs/genindex.html" title="General Index" accesskey="I">index</a></li>
+        <li class="right">
+          <a href="https://people.csail.mit.edu/hubert/pyaudio/docs/py-modindex.html" title="Python Module Index">modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/#">PyAudio 0.2.14 documentation</a> »</li>
+        <li class="nav-item nav-item-this"><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/">PyAudio Documentation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <section id="pyaudio-documentation">
+<h1><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id1" role="doc-backlink">PyAudio Documentation</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio-documentation" title="Link to this heading">¶</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio-documentation" id="id1">PyAudio Documentation</a></p>
+<ul>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#module-pyaudio" id="id2">Introduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#example-blocking-mode-audio-i-o" id="id3">Example: Blocking Mode Audio I/O</a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#example-callback-mode-audio-i-o" id="id4">Example: Callback Mode Audio I/O</a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#overview" id="id5">Overview</a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#details" id="id6">Details</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#class-pyaudio" id="id7">Class PyAudio</a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#class-pyaudio-stream" id="id8">Class PyAudio.Stream</a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#platform-specific" id="id9">Platform Specific</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#indices-and-tables" id="id10">Indices and tables</a></p></li>
+</ul>
+</nav>
+<section id="module-pyaudio">
+<span id="introduction"></span><h2><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id2" role="doc-backlink">Introduction</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#module-pyaudio" title="Link to this heading">¶</a></h2>
+<p>PyAudio provides Python bindings for PortAudio, the cross-platform
+audio I/O library. With PyAudio, you can easily use Python to play and
+record audio on a variety of platforms.</p>
+<section id="example-blocking-mode-audio-i-o">
+<h3><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id3" role="doc-backlink">Example: Blocking Mode Audio I/O</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#example-blocking-mode-audio-i-o" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""PyAudio Example: Play a wave file."""</span>
+
+<span class="kn">import</span> <span class="nn">wave</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">pyaudio</span>
+
+
+<span class="n">CHUNK</span> <span class="o">=</span> <span class="mi">1024</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Plays a wave file. Usage: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> filename.wav'</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">wave</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">wf</span><span class="p">:</span>
+    <span class="c1"># Instantiate PyAudio and initialize PortAudio system resources (1)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+
+    <span class="c1"># Open stream (2)</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get_format_from_width</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">getsampwidth</span><span class="p">()),</span>
+                    <span class="n">channels</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">getnchannels</span><span class="p">(),</span>
+                    <span class="n">rate</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">getframerate</span><span class="p">(),</span>
+                    <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Play samples from the wave file (3)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span> <span class="o">:=</span> <span class="n">wf</span><span class="o">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">CHUNK</span><span class="p">)):</span>  <span class="c1"># Requires Python 3.8+ for :=</span>
+        <span class="n">stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="c1"># Close stream (4)</span>
+    <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Release PortAudio system resources (5)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To use PyAudio, first instantiate PyAudio using <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio" title="pyaudio.PyAudio"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio()</span></code></a> (1),
+which acquires system resources for PortAudio.</p>
+<p>To record or play audio, open a stream on the desired device with the
+desired audio parameters using <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.open" title="pyaudio.PyAudio.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.open()</span></code></a>
+(2). This sets up a <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream" title="pyaudio.PyAudio.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream</span></code></a> to play or record
+audio.</p>
+<p>Play audio by writing audio data to the stream using
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.write" title="pyaudio.PyAudio.Stream.write"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.write()</span></code></a>, or read audio data from the stream
+using <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.read" title="pyaudio.PyAudio.Stream.read"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.read()</span></code></a>. (3)</p>
+<p>Note that in “blocking mode”, each <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.write" title="pyaudio.PyAudio.Stream.write"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.write()</span></code></a> or
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.read" title="pyaudio.PyAudio.Stream.read"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.read()</span></code></a> blocks until all frames have been
+played/recorded. An alternative approach is “callback mode”, described below, in
+which PyAudio invokes a user-defined function to process recorded audio or
+generate output audio.</p>
+<p>Use <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.close" title="pyaudio.PyAudio.Stream.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.close()</span></code></a> to close the stream. (4)</p>
+<p>Finally, terminate the PortAudio session and release system resources using
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.terminate" title="pyaudio.PyAudio.terminate"><code class="xref py py-func docutils literal notranslate"><span class="pre">pyaudio.PyAudio.terminate()</span></code></a>. (5)</p>
+</section>
+<section id="example-callback-mode-audio-i-o">
+<h3><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id4" role="doc-backlink">Example: Callback Mode Audio I/O</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#example-callback-mode-audio-i-o" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""PyAudio Example: Play a wave file (callback version)."""</span>
+
+<span class="kn">import</span> <span class="nn">wave</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">import</span> <span class="nn">pyaudio</span>
+
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Plays a wave file. Usage: </span><span class="si">{</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> filename.wav'</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">wave</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">'rb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">wf</span><span class="p">:</span>
+    <span class="c1"># Define callback for playback (1)</span>
+    <span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="n">frame_count</span><span class="p">,</span> <span class="n">time_info</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">wf</span><span class="o">.</span><span class="n">readframes</span><span class="p">(</span><span class="n">frame_count</span><span class="p">)</span>
+        <span class="c1"># If len(data) is less than requested frame_count, PyAudio automatically</span>
+        <span class="c1"># assumes the stream is finished, and the stream stops.</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">paContinue</span><span class="p">)</span>
+
+    <span class="c1"># Instantiate PyAudio and initialize PortAudio system resources (2)</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">pyaudio</span><span class="o">.</span><span class="n">PyAudio</span><span class="p">()</span>
+
+    <span class="c1"># Open stream using callback (3)</span>
+    <span class="n">stream</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">get_format_from_width</span><span class="p">(</span><span class="n">wf</span><span class="o">.</span><span class="n">getsampwidth</span><span class="p">()),</span>
+                    <span class="n">channels</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">getnchannels</span><span class="p">(),</span>
+                    <span class="n">rate</span><span class="o">=</span><span class="n">wf</span><span class="o">.</span><span class="n">getframerate</span><span class="p">(),</span>
+                    <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">stream_callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="c1"># Wait for stream to finish (4)</span>
+    <span class="k">while</span> <span class="n">stream</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="c1"># Close the stream (5)</span>
+    <span class="n">stream</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Release PortAudio system resources (6)</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In callback mode, PyAudio will call a user-defined callback function (1)
+whenever it needs new audio data to play and/or when new recorded audio data
+becomes available. PyAudio calls the callback function in a separate thread. The
+callback function must have the following signature <code class="docutils literal notranslate"><span class="pre">callback(&lt;input_data&gt;,</span>
+<span class="pre">&lt;frame_count&gt;,</span> <span class="pre">&lt;time_info&gt;,</span> <span class="pre">&lt;status_flag&gt;)</span></code>. It must return a tuple containing
+<code class="docutils literal notranslate"><span class="pre">frame_count</span></code> frames of audio data to output (for output streams) and a flag
+signifying whether there are more expected frames to play or record. (For
+input-only streams, the audio data portion of the return value is ignored.)</p>
+<p>The audio stream starts processing once the stream is opened (3), which will
+call the callback function repeatedly until that function returns
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paComplete" title="pyaudio.paComplete"><code class="xref py py-data docutils literal notranslate"><span class="pre">pyaudio.paComplete</span></code></a> or <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paAbort" title="pyaudio.paAbort"><code class="xref py py-data docutils literal notranslate"><span class="pre">pyaudio.paAbort</span></code></a>, or until either
+<code class="xref py py-data docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.stop</span></code> or
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.close" title="pyaudio.PyAudio.Stream.close"><code class="xref py py-data docutils literal notranslate"><span class="pre">pyaudio.PyAudio.Stream.close</span></code></a> is called. Note that if the callback
+returns fewer frames than the <code class="xref py py-data docutils literal notranslate"><span class="pre">frame_count</span></code> argument (2), the stream
+automatically closes after those frames are played.</p>
+<p>To keep the stream active, the main thread must remain alive, e.g., by sleeping
+(4). In the example above, once the entire wavefile is read,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">wf.readframes(frame_count)</span></code> will eventually return fewer than the
+requested frames. The stream will stop, and the while loop (4) will end.</p>
+</section>
+<section id="overview">
+<h3><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id5" role="doc-backlink">Overview</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#overview" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><strong>Classes</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio" title="pyaudio.PyAudio"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyAudio</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream" title="pyaudio.PyAudio.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyAudio.Stream</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt><strong>Host Specific Classes</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo" title="pyaudio.PaMacCoreStreamInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">PaMacCoreStreamInfo</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple">
+<dt><strong>Stream Conversion Convenience Functions</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_sample_size" title="pyaudio.get_sample_size"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sample_size()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_format_from_width" title="pyaudio.get_format_from_width"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_format_from_width()</span></code></a></p>
+</dd>
+<dt><strong>PortAudio version</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_portaudio_version" title="pyaudio.get_portaudio_version"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_portaudio_version()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_portaudio_version_text" title="pyaudio.get_portaudio_version_text"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_portaudio_version_text()</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple" id="pasampleformat">
+<dt><strong>Portaudio Sample Formats</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paFloat32" title="pyaudio.paFloat32"><code class="xref py py-data docutils literal notranslate"><span class="pre">paFloat32</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt32" title="pyaudio.paInt32"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInt32</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt24" title="pyaudio.paInt24"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInt24</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt16" title="pyaudio.paInt16"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInt16</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt8" title="pyaudio.paInt8"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInt8</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paUInt8" title="pyaudio.paUInt8"><code class="xref py py-data docutils literal notranslate"><span class="pre">paUInt8</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paCustomFormat" title="pyaudio.paCustomFormat"><code class="xref py py-data docutils literal notranslate"><span class="pre">paCustomFormat</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple" id="pahostapi">
+<dt><strong>PortAudio Host APIs</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInDevelopment" title="pyaudio.paInDevelopment"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInDevelopment</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paDirectSound" title="pyaudio.paDirectSound"><code class="xref py py-data docutils literal notranslate"><span class="pre">paDirectSound</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paMME" title="pyaudio.paMME"><code class="xref py py-data docutils literal notranslate"><span class="pre">paMME</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paASIO" title="pyaudio.paASIO"><code class="xref py py-data docutils literal notranslate"><span class="pre">paASIO</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paSoundManager" title="pyaudio.paSoundManager"><code class="xref py py-data docutils literal notranslate"><span class="pre">paSoundManager</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paCoreAudio" title="pyaudio.paCoreAudio"><code class="xref py py-data docutils literal notranslate"><span class="pre">paCoreAudio</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOSS" title="pyaudio.paOSS"><code class="xref py py-data docutils literal notranslate"><span class="pre">paOSS</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paALSA" title="pyaudio.paALSA"><code class="xref py py-data docutils literal notranslate"><span class="pre">paALSA</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paAL" title="pyaudio.paAL"><code class="xref py py-data docutils literal notranslate"><span class="pre">paAL</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paBeOS" title="pyaudio.paBeOS"><code class="xref py py-data docutils literal notranslate"><span class="pre">paBeOS</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paWDMKS" title="pyaudio.paWDMKS"><code class="xref py py-data docutils literal notranslate"><span class="pre">paWDMKS</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paJACK" title="pyaudio.paJACK"><code class="xref py py-data docutils literal notranslate"><span class="pre">paJACK</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paWASAPI" title="pyaudio.paWASAPI"><code class="xref py py-data docutils literal notranslate"><span class="pre">paWASAPI</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paNoDevice" title="pyaudio.paNoDevice"><code class="xref py py-data docutils literal notranslate"><span class="pre">paNoDevice</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple" id="paerrorcode">
+<dt><strong>PortAudio Error Codes</strong></dt><dd><p><code class="xref py py-data docutils literal notranslate"><span class="pre">paNoError</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paNotInitialized</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paUnanticipatedHostError</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paInvalidChannelCount</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paInvalidSampleRate</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paInvalidDevice</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paInvalidFlag</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paSampleFormatNotSupported</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paBadIODeviceCombination</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paInsufficientMemory</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paBufferTooBig</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paBufferTooSmall</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paNullCallback</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paBadStreamPtr</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paTimedOut</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paInternalError</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paDeviceUnavailable</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paIncompatibleHostApiSpecificStreamInfo</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paStreamIsStopped</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paStreamIsNotStopped</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paInputOverflowed</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paOutputUnderflowed</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paHostApiNotFound</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paInvalidHostApi</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paCanNotReadFromACallbackStream</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paCanNotWriteToACallbackStream</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paCanNotReadFromAnOutputOnlyStream</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paCanNotWriteToAnInputOnlyStream</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paIncompatibleStreamHostApi</span></code></p>
+</dd>
+</dl>
+<dl class="simple" id="pacallbackreturncodes">
+<dt><strong>PortAudio Callback Return Codes</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paContinue" title="pyaudio.paContinue"><code class="xref py py-data docutils literal notranslate"><span class="pre">paContinue</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paComplete" title="pyaudio.paComplete"><code class="xref py py-data docutils literal notranslate"><span class="pre">paComplete</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paAbort" title="pyaudio.paAbort"><code class="xref py py-data docutils literal notranslate"><span class="pre">paAbort</span></code></a></p>
+</dd>
+</dl>
+<dl class="simple" id="pacallbackflags">
+<dt><strong>PortAudio Callback Flags</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInputUnderflow" title="pyaudio.paInputUnderflow"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInputUnderflow</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInputOverflow" title="pyaudio.paInputOverflow"><code class="xref py py-data docutils literal notranslate"><span class="pre">paInputOverflow</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOutputUnderflow" title="pyaudio.paOutputUnderflow"><code class="xref py py-data docutils literal notranslate"><span class="pre">paOutputUnderflow</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOutputOverflow" title="pyaudio.paOutputOverflow"><code class="xref py py-data docutils literal notranslate"><span class="pre">paOutputOverflow</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paPrimingOutput" title="pyaudio.paPrimingOutput"><code class="xref py py-data docutils literal notranslate"><span class="pre">paPrimingOutput</span></code></a></p>
+</dd>
+</dl>
+</section>
+<section id="details">
+<h3><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id6" role="doc-backlink">Details</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#details" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyaudio.get_format_from_width">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">get_format_from_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unsigned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_format_from_width" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a PortAudio format constant for the specified <em>width</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> – The desired sample width in bytes (1, 2, 3, or 4)</p></li>
+<li><p><strong>unsigned</strong> – For 1 byte width, specifies signed or unsigned format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – when invalid <em>width</em></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyaudio.get_portaudio_version">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">get_portaudio_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_portaudio_version" title="Link to this definition">¶</a></dt>
+<dd><p>Returns portaudio version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyaudio.get_portaudio_version_text">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">get_portaudio_version_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_portaudio_version_text" title="Link to this definition">¶</a></dt>
+<dd><p>Returns PortAudio version as a text string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyaudio.get_sample_size">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">get_sample_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_sample_size" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the size (in bytes) for the specified sample <em>format</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>format</strong> – A <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – on invalid specified <cite>format</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paAL">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paAL" title="Link to this definition">¶</a></dt>
+<dd><p>Open Audio Library</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paALSA">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paALSA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paALSA" title="Link to this definition">¶</a></dt>
+<dd><p>Advanced Linux Sound Architecture (Linux only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paASIO">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paASIO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paASIO" title="Link to this definition">¶</a></dt>
+<dd><p>Steinberg Audio Stream Input/Output</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paAbort">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paAbort</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paAbort" title="Link to this definition">¶</a></dt>
+<dd><p>An error ocurred, stop playback/recording</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paBeOS">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paBeOS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paBeOS" title="Link to this definition">¶</a></dt>
+<dd><p>BeOS Sound System</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paComplete">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paComplete</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paComplete" title="Link to this definition">¶</a></dt>
+<dd><p>This was the last block of audio data</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paContinue">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paContinue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paContinue" title="Link to this definition">¶</a></dt>
+<dd><p>There is more audio data to come</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paCoreAudio">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paCoreAudio</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paCoreAudio" title="Link to this definition">¶</a></dt>
+<dd><p>CoreAudio (OSX only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paCustomFormat">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paCustomFormat</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">65536</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paCustomFormat" title="Link to this definition">¶</a></dt>
+<dd><p>a custom data format</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paDirectSound">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paDirectSound</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paDirectSound" title="Link to this definition">¶</a></dt>
+<dd><p>DirectSound (Windows only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paFloat32">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paFloat32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paFloat32" title="Link to this definition">¶</a></dt>
+<dd><p>32 bit float</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInDevelopment">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInDevelopment</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInDevelopment" title="Link to this definition">¶</a></dt>
+<dd><p>Still in development</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInputOverflow">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInputOverflow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInputOverflow" title="Link to this definition">¶</a></dt>
+<dd><p>Buffer overflow in input</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInputUnderflow">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInputUnderflow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInputUnderflow" title="Link to this definition">¶</a></dt>
+<dd><p>Buffer underflow in input</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInt16">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInt16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt16" title="Link to this definition">¶</a></dt>
+<dd><p>16 bit int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInt24">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInt24</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt24" title="Link to this definition">¶</a></dt>
+<dd><p>24 bit int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInt32">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInt32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt32" title="Link to this definition">¶</a></dt>
+<dd><p>32 bit int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paInt8">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paInt8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paInt8" title="Link to this definition">¶</a></dt>
+<dd><p>8 bit int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paJACK">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paJACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paJACK" title="Link to this definition">¶</a></dt>
+<dd><p>JACK Audio Connection Kit</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paMME">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paMME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paMME" title="Link to this definition">¶</a></dt>
+<dd><p>Multimedia Extension (Windows only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paNoDevice">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paNoDevice</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paNoDevice" title="Link to this definition">¶</a></dt>
+<dd><p>Not actually an audio device</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paOSS">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paOSS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOSS" title="Link to this definition">¶</a></dt>
+<dd><p>Open Sound System (Linux only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paOutputOverflow">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paOutputOverflow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOutputOverflow" title="Link to this definition">¶</a></dt>
+<dd><p>Buffer overflow in output</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paOutputUnderflow">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paOutputUnderflow</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paOutputUnderflow" title="Link to this definition">¶</a></dt>
+<dd><p>Buffer underflow in output</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paPrimingOutput">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paPrimingOutput</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paPrimingOutput" title="Link to this definition">¶</a></dt>
+<dd><p>Just priming, not playing yet</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paSoundManager">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paSoundManager</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paSoundManager" title="Link to this definition">¶</a></dt>
+<dd><p>SoundManager (OSX only)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paUInt8">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paUInt8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paUInt8" title="Link to this definition">¶</a></dt>
+<dd><p>8 bit unsigned int</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paWASAPI">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paWASAPI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paWASAPI" title="Link to this definition">¶</a></dt>
+<dd><p>Windows Vista Audio stack architecture</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="pyaudio.paWDMKS">
+<span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">paWDMKS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.paWDMKS" title="Link to this definition">¶</a></dt>
+<dd><p>Windows Driver Model (Windows only)</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="class-pyaudio">
+<h2><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id7" role="doc-backlink">Class PyAudio</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#class-pyaudio" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaudio.PyAudio">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">PyAudio</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio" title="Link to this definition">¶</a></dt>
+<dd><p>Python interface to PortAudio.</p>
+<dl class="simple">
+<dt>Provides methods to:</dt><dd><ul class="simple">
+<li><p>initialize and terminate PortAudio</p></li>
+<li><p>open and close streams</p></li>
+<li><p>query and inspect the available PortAudio Host APIs</p></li>
+<li><p>query and inspect the available PortAudio audio devices.</p></li>
+</ul>
+</dd>
+<dt><strong>Stream Management</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.open" title="pyaudio.PyAudio.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.close" title="pyaudio.PyAudio.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a></p>
+</dd>
+<dt><strong>Host API</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_count" title="pyaudio.PyAudio.get_host_api_count"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_host_api_count()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_host_api_info" title="pyaudio.PyAudio.get_default_host_api_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_default_host_api_info()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_info_by_type" title="pyaudio.PyAudio.get_host_api_info_by_type"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_host_api_info_by_type()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_info_by_index" title="pyaudio.PyAudio.get_host_api_info_by_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_host_api_info_by_index()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_info_by_host_api_device_index" title="pyaudio.PyAudio.get_device_info_by_host_api_device_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_device_info_by_host_api_device_index()</span></code></a></p>
+</dd>
+<dt><strong>Device API</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_count" title="pyaudio.PyAudio.get_device_count"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_device_count()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.is_format_supported" title="pyaudio.PyAudio.is_format_supported"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_format_supported()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_input_device_info" title="pyaudio.PyAudio.get_default_input_device_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_default_input_device_info()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_output_device_info" title="pyaudio.PyAudio.get_default_output_device_info"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_default_output_device_info()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_info_by_index" title="pyaudio.PyAudio.get_device_info_by_index"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_device_info_by_index()</span></code></a></p>
+</dd>
+<dt><strong>Stream Format Conversion</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_sample_size" title="pyaudio.get_sample_size"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_sample_size()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.get_format_from_width" title="pyaudio.get_format_from_width"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_format_from_width()</span></code></a></p>
+</dd>
+</dl>
+<p><strong>Details</strong></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize PortAudio.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.__weakref__" title="Link to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.close" title="Link to this definition">¶</a></dt>
+<dd><p>Closes a stream. Use <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.close" title="pyaudio.PyAudio.Stream.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.close()</span></code></a> instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stream</strong> – An instance of the <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream" title="pyaudio.PyAudio.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyAudio.Stream</span></code></a> object.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – if stream does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_default_host_api_info">
+<span class="sig-name descname"><span class="pre">get_default_host_api_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_host_api_info" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a dictionary containing the default Host API parameters.</p>
+<p>The keys of the dictionary mirror the data fields of PortAudio’s
+<code class="docutils literal notranslate"><span class="pre">PaHostApiInfo</span></code> structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IOError</strong> – if no default input device is available</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_default_input_device_info">
+<span class="sig-name descname"><span class="pre">get_default_input_device_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_input_device_info" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the default input device parameters as a dictionary.</p>
+<p>The keys of the dictionary mirror the data fields of PortAudio’s
+<code class="docutils literal notranslate"><span class="pre">PaDeviceInfo</span></code> structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IOError</strong> – No default input device available.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_default_output_device_info">
+<span class="sig-name descname"><span class="pre">get_default_output_device_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_default_output_device_info" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the default output device parameters as a dictionary.</p>
+<p>The keys of the dictionary mirror the data fields of PortAudio’s
+<code class="docutils literal notranslate"><span class="pre">PaDeviceInfo</span></code> structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>IOError</strong> – No default output device available.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_device_count">
+<span class="sig-name descname"><span class="pre">get_device_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_count" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the number of PortAudio Host APIs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_device_info_by_host_api_device_index">
+<span class="sig-name descname"><span class="pre">get_device_info_by_host_api_device_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_api_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">host_api_device_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_info_by_host_api_device_index" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a dictionary containing the Device parameters for a
+given Host API’s n’th device. The keys of the dictionary
+mirror the data fields of PortAudio’s <code class="docutils literal notranslate"><span class="pre">PaDeviceInfo</span></code> structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>host_api_index</strong> – The Host API index number</p></li>
+<li><p><strong>host_api_device_index</strong> – The n’th device of the host API</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – for invalid indices</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_device_info_by_index">
+<span class="sig-name descname"><span class="pre">get_device_info_by_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_device_info_by_index" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the device parameters for device specified in <cite>device_index</cite>
+as a dictionary. The keys of the dictionary mirror the data fields of
+PortAudio’s <code class="docutils literal notranslate"><span class="pre">PaDeviceInfo</span></code> structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device_index</strong> – The device index</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – Invalid <cite>device_index</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_format_from_width">
+<span class="sig-name descname"><span class="pre">get_format_from_width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unsigned</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_format_from_width" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a PortAudio format constant for the specified <cite>width</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> – The desired sample width in bytes (1, 2, 3, or 4)</p></li>
+<li><p><strong>unsigned</strong> – For 1 byte width, specifies signed or unsigned format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – for invalid <cite>width</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_host_api_count">
+<span class="sig-name descname"><span class="pre">get_host_api_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_count" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the number of available PortAudio Host APIs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_host_api_info_by_index">
+<span class="sig-name descname"><span class="pre">get_host_api_info_by_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_api_index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_info_by_index" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a dictionary containing the Host API parameters for the
+host API specified by the <cite>host_api_index</cite>. The keys of the
+dictionary mirror the data fields of PortAudio’s <code class="docutils literal notranslate"><span class="pre">PaHostApiInfo</span></code>
+structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>host_api_index</strong> – The host api index</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – for invalid <cite>host_api_index</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_host_api_info_by_type">
+<span class="sig-name descname"><span class="pre">get_host_api_info_by_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_api_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_host_api_info_by_type" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a dictionary containing the Host API parameters for the
+host API specified by the <cite>host_api_type</cite>. The keys of the
+dictionary mirror the data fields of PortAudio’s <code class="docutils literal notranslate"><span class="pre">PaHostApiInfo</span></code>
+structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>host_api_type</strong> – The desired <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pahostapi"><span class="std std-ref">PortAudio Host API</span></a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – for invalid <cite>host_api_type</cite></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.get_sample_size">
+<span class="sig-name descname"><span class="pre">get_sample_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.get_sample_size" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the size (in bytes) for the specified sample <cite>format</cite>
+(a <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>format</strong> – A <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Invalid specified <cite>format</cite>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.is_format_supported">
+<span class="sig-name descname"><span class="pre">is_format_supported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.is_format_supported" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if specified device configuration is supported.</p>
+<p>Returns True if the configuration is supported; raises ValueError
+otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rate</strong> – Specifies the desired rate (in Hz)</p></li>
+<li><p><strong>input_device</strong> – The input device index. Specify <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) for
+half-duplex output-only streams.</p></li>
+<li><p><strong>input_channels</strong> – The desired number of input channels. Ignored if
+<cite>input_device</cite> is not specified (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+<li><p><strong>input_format</strong> – PortAudio sample format constant defined
+in this module</p></li>
+<li><p><strong>output_device</strong> – The output device index. Specify <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) for
+half-duplex input-only streams.</p></li>
+<li><p><strong>output_channels</strong> – The desired number of output channels. Ignored if
+<cite>input_device</cite> is not specified (or <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+<li><p><strong>output_format</strong> – <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a> constant.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – tuple containing (error string, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#paerrorcode"><span class="std std-ref">PortAudio Error Code</span></a>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.open" title="Link to this definition">¶</a></dt>
+<dd><p>Opens a new stream.</p>
+<p>See constructor for <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.__init__" title="pyaudio.PyAudio.Stream.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.__init__()</span></code></a> for parameter
+details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A new <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream" title="pyaudio.PyAudio.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyAudio.Stream</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.terminate">
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.terminate" title="Link to this definition">¶</a></dt>
+<dd><p>Terminates PortAudio.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attention<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Be sure to call this method for every instance of this
+object to release PortAudio resources.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="class-pyaudio-stream">
+<h2><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id8" role="doc-backlink">Class PyAudio.Stream</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#class-pyaudio-stream" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaudio.PyAudio.</span></span><span class="sig-name descname"><span class="pre">Stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PA_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_device_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_device_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames_per_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_host_api_specific_stream_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_host_api_specific_stream_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream" title="Link to this definition">¶</a></dt>
+<dd><p>PortAudio Stream Wrapper. Use <code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.open()</span></code> to instantiate.</p>
+<dl class="simple">
+<dt><strong>Opening and Closing</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.__init__" title="pyaudio.PyAudio.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">__init__()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.close" title="pyaudio.PyAudio.close"><code class="xref py py-func docutils literal notranslate"><span class="pre">close()</span></code></a></p>
+</dd>
+<dt><strong>Stream Info</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_input_latency" title="pyaudio.PyAudio.Stream.get_input_latency"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_input_latency()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_output_latency" title="pyaudio.PyAudio.Stream.get_output_latency"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_output_latency()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_time" title="pyaudio.PyAudio.Stream.get_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_time()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_cpu_load" title="pyaudio.PyAudio.Stream.get_cpu_load"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_cpu_load()</span></code></a></p>
+</dd>
+<dt><strong>Stream Management</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.start_stream" title="pyaudio.PyAudio.Stream.start_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">start_stream()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.stop_stream" title="pyaudio.PyAudio.Stream.stop_stream"><code class="xref py py-func docutils literal notranslate"><span class="pre">stop_stream()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.is_active" title="pyaudio.PyAudio.Stream.is_active"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_active()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.is_stopped" title="pyaudio.PyAudio.Stream.is_stopped"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_stopped()</span></code></a></p>
+</dd>
+<dt><strong>Input Output</strong></dt><dd><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.write" title="pyaudio.PyAudio.Stream.write"><code class="xref py py-func docutils literal notranslate"><span class="pre">write()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.read" title="pyaudio.PyAudio.Stream.read"><code class="xref py py-func docutils literal notranslate"><span class="pre">read()</span></code></a>, <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_read_available" title="pyaudio.PyAudio.Stream.get_read_available"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_read_available()</span></code></a>,
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_write_available" title="pyaudio.PyAudio.Stream.get_write_available"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_write_available()</span></code></a></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PA_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_device_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_device_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames_per_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_host_api_specific_stream_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_host_api_specific_stream_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize an audio stream.</p>
+<p>Do not call directly. Use <code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.open()</span></code>.</p>
+<p>A stream can either be input, output, or both.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>PA_manager</strong> – A reference to the managing <code class="xref py py-class docutils literal notranslate"><span class="pre">PyAudio</span></code>
+instance</p></li>
+<li><p><strong>rate</strong> – Sampling rate</p></li>
+<li><p><strong>channels</strong> – Number of channels</p></li>
+<li><p><strong>format</strong> – Sampling size and format. See <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pasampleformat"><span class="std std-ref">PortAudio Sample Format</span></a>.</p></li>
+<li><p><strong>input</strong> – Specifies whether this is an input stream.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>output</strong> – Specifies whether this is an output stream.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>input_device_index</strong> – Index of Input Device to use.
+Unspecified (or <code class="docutils literal notranslate"><span class="pre">None</span></code>) uses default device.
+Ignored if <cite>input</cite> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>output_device_index</strong> – Index of Output Device to use.
+Unspecified (or <code class="docutils literal notranslate"><span class="pre">None</span></code>) uses the default device.
+Ignored if <cite>output</cite> is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>frames_per_buffer</strong> – Specifies the number of frames per buffer.</p></li>
+<li><p><strong>start</strong> – Start the stream running immediately.
+Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>. In general, there is no reason to set
+this to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>input_host_api_specific_stream_info</strong> – </p><p>Specifies a host API
+specific stream information data structure for input.</p>
+<p>See <code class="xref py py-class docutils literal notranslate"><span class="pre">PaMacCoreStreamInfo</span></code>.</p>
+<p></p></li>
+<li><p><strong>output_host_api_specific_stream_info</strong> – </p><p>Specifies a host API
+specific stream information data structure for output.</p>
+<p>See <code class="xref py py-class docutils literal notranslate"><span class="pre">PaMacCoreStreamInfo</span></code>.</p>
+<p></p></li>
+<li><p><strong>stream_callback</strong> – </p><p>Specifies a callback function for
+<em>non-blocking</em> (callback) operation.  Default is
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, which indicates <em>blocking</em> operation (i.e.,
+<code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.read()</span></code> and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.write()</span></code>).  To use non-blocking
+operation, specify a callback that conforms to the following
+signature:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">callback</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span>      <span class="c1"># input data if input=True; else None</span>
+         <span class="n">frame_count</span><span class="p">,</span>  <span class="c1"># number of frames</span>
+         <span class="n">time_info</span><span class="p">,</span>    <span class="c1"># dictionary</span>
+         <span class="n">status_flags</span><span class="p">)</span> <span class="c1"># PaCallbackFlags</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">time_info</span></code> is a dictionary with the following keys:
+<code class="docutils literal notranslate"><span class="pre">input_buffer_adc_time</span></code>, <code class="docutils literal notranslate"><span class="pre">current_time</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">output_buffer_dac_time</span></code>; see the PortAudio
+documentation for their meanings.  <code class="docutils literal notranslate"><span class="pre">status_flags</span></code> is one
+of <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pacallbackflags"><span class="std std-ref">PortAutio Callback Flag</span></a>.</p>
+<p>The callback must return a tuple:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">out_data</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">out_data</span></code> is a byte array whose length should be the
+(<code class="docutils literal notranslate"><span class="pre">frame_count</span> <span class="pre">*</span> <span class="pre">channels</span> <span class="pre">*</span> <span class="pre">bytes-per-channel</span></code>) if
+<code class="docutils literal notranslate"><span class="pre">output=True</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code> if <code class="docutils literal notranslate"><span class="pre">output=False</span></code>.  <code class="docutils literal notranslate"><span class="pre">flag</span></code>
+must be either <code class="xref py py-data docutils literal notranslate"><span class="pre">paContinue</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">paComplete</span></code> or
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paAbort</span></code> (one of <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pacallbackreturncodes"><span class="std std-ref">PortAudio Callback Return Code</span></a>).
+When <code class="docutils literal notranslate"><span class="pre">output=True</span></code> and <code class="docutils literal notranslate"><span class="pre">out_data</span></code> does not contain at
+least <code class="docutils literal notranslate"><span class="pre">frame_count</span></code> frames, <code class="xref py py-data docutils literal notranslate"><span class="pre">paComplete</span></code> is
+assumed for <code class="docutils literal notranslate"><span class="pre">flag</span></code>.</p>
+<p><strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">stream_callback</span></code> is called in a separate
+thread (from the main thread).  Exceptions that occur in
+the <code class="docutils literal notranslate"><span class="pre">stream_callback</span></code> will:</p>
+<ol class="arabic simple">
+<li><p>print a traceback on standard error to aid debugging,</p></li>
+<li><p>queue the exception to be thrown (at some point) in
+the main thread, and</p></li>
+<li><p>return <cite>paAbort</cite> to PortAudio to stop the stream.</p></li>
+</ol>
+<p><strong>Note:</strong> Do not call <code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.read()</span></code> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.write()</span></code> if using non-blocking operation.</p>
+<p><strong>See:</strong> PortAudio’s callback signature for additional
+details: <a class="reference external" href="http://portaudio.com/docs/v19-doxydocs/portaudio_8h.html#a8a60fb2a5ec9cbade3f54a9c978e2710">http://portaudio.com/docs/v19-doxydocs/portaudio_8h.html#a8a60fb2a5ec9cbade3f54a9c978e2710</a></p>
+<p></p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Neither input nor output are set True.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.__weakref__" title="Link to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.close" title="Link to this definition">¶</a></dt>
+<dd><p>Closes the stream.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_cpu_load">
+<span class="sig-name descname"><span class="pre">get_cpu_load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_cpu_load" title="Link to this definition">¶</a></dt>
+<dd><p>Return the CPU load. Always 0.0 when using the blocking API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_input_latency">
+<span class="sig-name descname"><span class="pre">get_input_latency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_input_latency" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the input latency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_output_latency">
+<span class="sig-name descname"><span class="pre">get_output_latency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_output_latency" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the output latency.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_read_available">
+<span class="sig-name descname"><span class="pre">get_read_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_read_available" title="Link to this definition">¶</a></dt>
+<dd><p>Return the number of frames that can be read without waiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_time">
+<span class="sig-name descname"><span class="pre">get_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_time" title="Link to this definition">¶</a></dt>
+<dd><p>Returns stream time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.get_write_available">
+<span class="sig-name descname"><span class="pre">get_write_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.get_write_available" title="Link to this definition">¶</a></dt>
+<dd><p>Return the number of frames that can be written without waiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.is_active">
+<span class="sig-name descname"><span class="pre">is_active</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.is_active" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether the stream is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.is_stopped">
+<span class="sig-name descname"><span class="pre">is_stopped</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.is_stopped" title="Link to this definition">¶</a></dt>
+<dd><p>Returns whether the stream is stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_on_overflow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.read" title="Link to this definition">¶</a></dt>
+<dd><p>Read samples from the stream.</p>
+<p>Do not call when using non-blocking mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_frames</strong> – The number of frames to read.</p></li>
+<li><p><strong>exception_on_overflow</strong> – Specifies whether an IOError exception should be thrown
+(or silently ignored) on input buffer overflow. Defaults
+to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – if stream is not an input stream
+or if the read operation was unsuccessful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.start_stream">
+<span class="sig-name descname"><span class="pre">start_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.start_stream" title="Link to this definition">¶</a></dt>
+<dd><p>Starts the stream.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.stop_stream">
+<span class="sig-name descname"><span class="pre">stop_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.stop_stream" title="Link to this definition">¶</a></dt>
+<dd><p>Stops the stream.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PyAudio.Stream.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_frames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception_on_underflow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write samples to the stream for playback.</p>
+<p>Do not call when using non-blocking mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frames</strong> – The frames of data.</p></li>
+<li><p><strong>num_frames</strong> – The number of frames to write.
+Defaults to None, in which this value will be
+automatically computed.</p></li>
+<li><p><strong>exception_on_underflow</strong> – Specifies whether an IOError exception should be thrown
+(or silently ignored) on buffer underflow. Defaults
+to False for improved performance, especially on
+slower platforms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>IOError</strong> – if the stream is not an output stream
+or if the write operation was unsuccessful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>None</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="platform-specific">
+<h2><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id9" role="doc-backlink">Platform Specific</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#platform-specific" title="Link to this heading">¶</a></h2>
+<section id="class-pamaccorestreaminfo">
+<h3>Class PaMacCoreStreamInfo<a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#class-pamaccorestreaminfo" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaudio.</span></span><span class="sig-name descname"><span class="pre">PaMacCoreStreamInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo" title="Link to this definition">¶</a></dt>
+<dd><p>PortAudio Host API Specific Stream Info for macOS-specific settings.</p>
+<p>To configure macOS-specific settings, instantiate this class and pass
+it as the argument in <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.open" title="pyaudio.PyAudio.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.open()</span></code></a> to parameters
+<code class="docutils literal notranslate"><span class="pre">input_host_api_specific_stream_info</span></code> or
+<code class="docutils literal notranslate"><span class="pre">output_host_api_specific_stream_info</span></code>.  (See
+<a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PyAudio.Stream.__init__" title="pyaudio.PyAudio.Stream.__init__"><code class="xref py py-func docutils literal notranslate"><span class="pre">PyAudio.Stream.__init__()</span></code></a>.)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Note<span class="colon">:</span></dt>
+<dd class="field-odd"><p>macOS-only.</p>
+</dd>
+</dl>
+<dl class="simple" id="pamaccoreflags">
+<dt><strong>PortAudio Mac Core Flags</strong></dt><dd><p><code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreChangeDeviceParameters</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreFailIfConversionRequired</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreConversionQualityMin</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreConversionQualityMedium</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreConversionQualityLow</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreConversionQualityHigh</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreConversionQualityMax</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCorePlayNice</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCorePro</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreMinimizeCPUButPlayNice</span></code>,
+<code class="xref py py-data docutils literal notranslate"><span class="pre">paMacCoreMinimizeCPU</span></code></p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.flags" title="Link to this definition">¶</a></dt>
+<dd><p>The flags specified to the constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pamaccoreflags"><span class="std std-ref">PortAudio Mac Core Flags</span></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.channel_map">
+<span class="sig-name descname"><span class="pre">channel_map</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.channel_map" title="Link to this definition">¶</a></dt>
+<dd><p>The channel_map specified to the constructor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple or None if unspecified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize with macOS setting flags and channel_map.</p>
+<p>See PortAudio documentation for more details on these parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flags</strong> – <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pamaccoreflags"><span class="std std-ref">PortAudio Mac Core Flags</span></a> OR’ed together.</p></li>
+<li><p><strong>channel_map</strong> – An array describing the channel mapping.
+See PortAudio documentation for usage.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.__weakref__" title="Link to this definition">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.get_channel_map">
+<span class="sig-name descname"><span class="pre">get_channel_map</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.get_channel_map" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the channel map set at instantiation. Deprecated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple or None</p>
+</dd>
+</dl>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.2.13: </span>Use <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.channel_map" title="pyaudio.PaMacCoreStreamInfo.channel_map"><code class="xref py py-attr docutils literal notranslate"><span class="pre">channel_map</span></code></a> property.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaudio.PaMacCoreStreamInfo.get_flags">
+<span class="sig-name descname"><span class="pre">get_flags</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.get_flags" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the flags set at instantiation. Deprecated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>integer</p>
+</dd>
+</dl>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.2.13: </span>Use <a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#pyaudio.PaMacCoreStreamInfo.flags" title="pyaudio.PaMacCoreStreamInfo.flags"><code class="xref py py-attr docutils literal notranslate"><span class="pre">flags</span></code></a> property.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1><a class="toc-backref" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#id10" role="doc-backlink">Indices and tables</a><a class="headerlink" href="https://people.csail.mit.edu/hubert/pyaudio/docs/#indices-and-tables" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="https://people.csail.mit.edu/hubert/pyaudio/docs/search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="https://people.csail.mit.edu/hubert/pyaudio/docs/genindex.html" title="General Index">index</a></li>
+        <li class="right">
+          <a href="https://people.csail.mit.edu/hubert/pyaudio/docs/py-modindex.html" title="Python Module Index">modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/#">PyAudio 0.2.14 documentation</a> »</li>
+        <li class="nav-item nav-item-this"><a href="https://people.csail.mit.edu/hubert/pyaudio/docs/">PyAudio Documentation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    © Copyright 2006, Hubert Pham.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  
+</body></html>
